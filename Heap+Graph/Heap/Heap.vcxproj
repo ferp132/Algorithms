@@ -115,6 +115,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CNode.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="BinaryHeap.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BinaryHeap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
