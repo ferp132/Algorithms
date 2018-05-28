@@ -58,7 +58,7 @@ private:
 	//-----Storage For Bitmap
 	HBITMAP BitMapHandle;
 	BITMAP	BitMapStructure;
-
+	HDC		LocalDC;
 };
 
 #endif

@@ -60,7 +60,43 @@ void Card::SetEndY(int NewY)
 //--------------------------------------------------------Draw
 void Card::Draw(HDC hdc)
 {
+	//-----Load Bitmap
 	BitMapHandle = (HBITMAP)::LoadImage(NULL, L"Classic_Cards13x4x560x780.png", IMAGE_BITMAP, 560, 780, LR_LOADFROMFILE);
+	//-----Verify Loading
+	if (BitMapHandle == NULL)
+	{
+		MessageBox(NULL, L"Load Image Failed", L"Error", MB_OK);
+		return;
+	}
+
+	//-----Create Compatable Device Context "DC"
+	LocalDC = CreateCompatibleDC(hdc);
+	//-----Verify DC was Created
+	if (BitMapHandle == NULL)
+	{
+		MessageBox(NULL, L"Create DC Failed", L"Error", MB_OK);
+		return;
+	}
+
+	//-----Create Bitmap Structure
+	int Return = GetObject(BitMapHandle, sizeof(BITMAP), &BitMapStructure);
+	//-----Check Fail
+	if (!Return)
+	{
+		MessageBox(NULL, L"GetObject() Failed", L"Error", MB_OK);
+		return;
+	}
+
+	//-----Actual Drawing
+	Return = BitBlt(hdc, StartX, StartY, 560, 780, LocalDC, 560 * Value, 780 * Suit, SRCCOPY);
+	//-----Check Fail
+	if (!Return)
+	{
+		MessageBox(NULL, L"GetObject() Failed", L"Error", MB_OK);
+		return;
+	}
+
+	//TODO: Deselect Objects
 }
 
 //--------------------------------------------------------Return Values
