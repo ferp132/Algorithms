@@ -146,6 +146,7 @@
     <ClInclude Include="BackBuffer.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Card.h" />
+    <ClInclude Include="Stack.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Solitare.h" />
     <ClInclude Include="stdafx.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Solitare.cpp" />
+    <ClCompile Include="Stack.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

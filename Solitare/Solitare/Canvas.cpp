@@ -9,6 +9,7 @@ CCanvas::CCanvas()
 
 CCanvas::~CCanvas()
 {
+	delete m_pBackBuffer;
 	for (int i = 0; i < m_shapes.size(); i++)
 	{
 		delete m_shapes.at(i);

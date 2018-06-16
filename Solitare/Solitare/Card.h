@@ -11,7 +11,7 @@ class Card
 public:
 	//-----Constructor/Deconstructor
 //	CStamp(HINSTANCE hInstance, wchar_t* filename, int, int);
-	Card(int InitialSuit, int InitialValue, int InitialX, int InitialY);
+	Card(int InitialSuit, int InitialValue, int InitialX, int InitialY, bool SetRevealed);
 	virtual ~Card();
 
 	//-----Set Values
@@ -53,6 +53,22 @@ public:
 	int	    GetLastPositionX();
 	int 	GetLastPositionY();
 
+	//-----Stack Variables
+	Card* NextCard;
+	Card* PreviousCard;
+	int NextValidSuit;
+	int NextValidValue;
+
+	//-----Stack Functions
+	void	SetNextCard		(Card* NewNextCard);
+	void	SetPreviousCard	(Card* NewPreviousCard);
+	Card*	GetNextCard		() const;
+	Card*	GetPreviousCard	() const;
+	int GetNextValidSuit();
+	int GetNextValidValue();
+	void SetNextValidSuit(int NewSuit);
+	void SetNextValidValue(int NewValue);
+
 private:
 	//-----Variables
 	int		Suit;
@@ -65,8 +81,8 @@ private:
 	int			StartY;
 	int			EndX;
 	int			EndY;	
-	int const	CardWidth = 140;
-	int const	CardHeight = 195;
+	//-----Card Size
+
 
 	//----Pick Up Point
 	int		PickUpWidth;
@@ -75,6 +91,7 @@ private:
 	//-----Locations
 	int		LastPositionX;
 	int		LastPositionY;
+
 	//-----Storage For Bitmap
 	HBITMAP BitmapHandle;
 	HBITMAP OldBitmapHandle;

@@ -2,9 +2,9 @@
 #include "Card.h"
 
 //--------------------------------------------------------Constructor
-Card::Card(int InitialSuit, int InitialValue, int InitialX, int InitialY)
+Card::Card(int InitialSuit, int InitialValue, int InitialX, int InitialY, bool SetRevealed)
 {
-	Revealed		= 1;
+	Revealed		= SetRevealed;
 	Suit			= InitialSuit;
 	Value			= InitialValue;
 	StartX			= InitialX;
@@ -13,6 +13,10 @@ Card::Card(int InitialSuit, int InitialValue, int InitialX, int InitialY)
 	EndY			= StartY + CardHeight;
 	LastPositionX	= StartX;
 	LastPositionY	= StartY;
+
+	//-----For Stack
+	NextCard		= nullptr;
+	PreviousCard	= nullptr;
 
 }
 
@@ -218,5 +222,49 @@ int Card::GetLastPositionX()
 int Card::GetLastPositionY()
 {
 	return LastPositionY;
+}
+
+
+
+
+//-------------------------------------------------------- For Stack
+void Card::SetNextCard(Card * NewNextCard)
+{
+	NextCard = NewNextCard;
+}
+
+void Card::SetPreviousCard(Card * NewPreviousCard)
+{
+	PreviousCard = NewPreviousCard;
+}
+
+Card * Card::GetNextCard() const
+{
+	return NextCard;
+}
+
+Card * Card::GetPreviousCard() const
+{
+	return PreviousCard;
+}
+
+int Card::GetNextValidSuit()
+{
+	return NextValidSuit;
+}
+
+int Card::GetNextValidValue()
+{
+	return NextValidValue;
+}
+
+void Card::SetNextValidSuit(int NewSuit)
+{
+	NextValidSuit = NewSuit;
+}
+
+void Card::SetNextValidValue(int NewValue)
+{
+	NextValidValue = NewValue;
 }
 
