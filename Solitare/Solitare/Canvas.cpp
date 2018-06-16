@@ -58,7 +58,3 @@ void CCanvas::AddCard(Card * shape)
 {
 	m_shapes.push_back(shape);
 }
-
-void CCanvas::AddStamp(CStamp *)
-{
-}

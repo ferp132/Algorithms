@@ -20,21 +20,7 @@ Mail        :   [your.name]@mediadesign.school.nz
 #include <windowsx.h>
 #include <vector>
 
-enum SUIT
-{
-	HEART = 1,
-	DIAMOND = 2,
-	SPADE = 3,
-	CLUB = 4
-};
 
-enum CARDNAME
-{
-	ACE = 1,
-	JACK = 11,
-	QUEEN = 12,
-	KING = 13
-};
 
 
 class Card; //Forward Declaration
@@ -50,11 +36,11 @@ public:
 	bool Draw();
 	void Save(HWND _hwnd);
 	void AddCard(Card*);
-	void AddStamp(CStamp*);
+//	void AddStamp(CStamp*);
 
 private:
 	CBackBuffer* m_pBackBuffer; // A canvas has a backbuffer.
-	std::vector<CStamp*> m_vecStamps;
+//	std::vector<CStamp*> m_vecStamps;
 	std::vector<Card*> m_shapes;
 	HWND hwnd;
 };

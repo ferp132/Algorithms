@@ -2,11 +2,18 @@
 #include "Card.h"
 
 //--------------------------------------------------------Constructor
-Card::Card(int InitialSuit, int InitialValue)
+Card::Card(int InitialSuit, int InitialValue, int InitialX, int InitialY)
 {
-	Revealed		= 0;
+	Revealed		= 1;
 	Suit			= InitialSuit;
 	Value			= InitialValue;
+	StartX			= InitialX;
+	StartY			= InitialY;
+	EndX			= StartX + CardWidth;
+	EndY			= StartY + CardHeight;
+	LastPositionX	= StartX;
+	LastPositionY	= StartY;
+
 }
 
 //--------------------------------------------------------Destructor
@@ -40,11 +47,13 @@ void Card::SetRevelaled()
 void Card::SetStartX(int NewX)
 {
 	StartX = NewX;
+	EndX = NewX + CardWidth;
 }
 
 void Card::SetStartY(int NewY)
 {
 	StartY = NewY;
+	EndY = NewY + CardHeight;
 }
 
 void Card::SetEndX(int NewX)
@@ -57,38 +66,85 @@ void Card::SetEndY(int NewY)
 	EndY = NewY;
 }
 
+void Card::SetPickUpWidth(int NewWidth)
+{
+	PickUpWidth = NewWidth;
+}
+
+void Card::SetPickUpHeight(int NewHeight)
+{
+	PickUpHeight = NewHeight;
+}
+
+void Card::SetLastPositionX(int NewX)
+{
+	LastPositionX = NewX;
+}
+
+void Card::SetLastPositionY(int NewY)
+{
+	LastPositionY = NewY;
+}
+
 //--------------------------------------------------------Draw
 void Card::Draw(HDC hdc)
 {
 	//-----Load Bitmap
-	BitMapHandle = (HBITMAP)::LoadImage(NULL, L"Classic_Cards13x4x560x780.png", IMAGE_BITMAP, 560, 780, LR_LOADFROMFILE);
+	if (Revealed)
+	{
+		BitmapHandle = (HBITMAP)::LoadImage(NULL, L"Classic_Cards13x4x560x780.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	}
+	else
+	{
+		BitmapHandle = (HBITMAP)::LoadImage(NULL, L"HearthStone_CardBack_ReSized.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	}
+
 	//-----Verify Loading
-	if (BitMapHandle == NULL)
+	if (BitmapHandle == NULL)
 	{
 		MessageBox(NULL, L"Load Image Failed", L"Error", MB_OK);
+		GetLastError();
 		return;
 	}
 
 	//-----Create Compatable Device Context "DC"
 	LocalDC = CreateCompatibleDC(hdc);
 	//-----Verify DC was Created
-	if (BitMapHandle == NULL)
+	if (BitmapHandle == NULL)
 	{
 		MessageBox(NULL, L"Create DC Failed", L"Error", MB_OK);
 		return;
 	}
 
 	//-----Create Bitmap Structure
-	int Return = GetObject(BitMapHandle, sizeof(BITMAP), &BitMapStructure);
+	int Return = GetObject(BitmapHandle, sizeof(BITMAP), &BitMapStructure);
 	//-----Check Fail
 	if (!Return)
 	{
 		MessageBox(NULL, L"GetObject() Failed", L"Error", MB_OK);
+		return;
+	}
+
+	//-----Select the loaded bitmap into the DC
+	OldBitmapHandle = (HBITMAP)::SelectObject(LocalDC, BitmapHandle);
+	if (OldBitmapHandle == NULL)
+	{
+		MessageBox(NULL, L"Select Object Failed", L"Error", MB_OK);
 		return;
 	}
 
 	//-----Actual Drawing
-	Return = BitBlt(hdc, StartX, StartY, 560, 780, LocalDC, 560 * Value, 780 * Suit, SRCCOPY);
+	if (Revealed) 
+	{
+		
+		Return = BitBlt(hdc, StartX, StartY, CardWidth, CardHeight, LocalDC, CardWidth * Suit, CardHeight * Value, SRCCOPY);
+			
+	}
+	else
+	{
+		Return = BitBlt(hdc, StartX, StartY, CardWidth, CardHeight, LocalDC, 0, 0, SRCCOPY);
+		
+	}
 	//-----Check Fail
 	if (!Return)
 	{
@@ -96,7 +152,10 @@ void Card::Draw(HDC hdc)
 		return;
 	}
 
-	//TODO: Deselect Objects
+	//Deselect Objects
+	SelectObject(LocalDC, OldBitmapHandle);
+	DeleteDC(LocalDC);
+	DeleteObject(BitmapHandle);
 }
 
 //--------------------------------------------------------Return Values
@@ -139,5 +198,25 @@ int Card::GetEndX()
 int Card::GetEndY()
 {
 	return EndY;
+}
+
+int Card::GetPickUpWidth()
+{
+	return PickUpWidth;
+}
+
+int Card::GetPickUpHeight()
+{
+	return PickUpHeight;
+}
+
+int Card::GetLastPositionX()
+{
+	return LastPositionX;
+}
+
+int Card::GetLastPositionY()
+{
+	return LastPositionY;
 }
 

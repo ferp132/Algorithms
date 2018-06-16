@@ -91,5 +91,3 @@ void CBackBuffer::Present()
 	ReleaseDC(m_hWnd, _hWindowDC);
 
 }
-
-
