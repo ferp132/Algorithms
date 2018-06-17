@@ -4,7 +4,6 @@
 //	Library Includes
 #include <windows.h>
 #include <windowsx.h>
-
 #include "Card.h"
 
 enum SUIT
@@ -33,11 +32,14 @@ enum CARDNAME
 	KING = 12
 };
 
-enum CARDSIZE
+enum CARDCOLOUR
 {
-	CARDWIDTH = 140,
-	CARDHEIGHT = 195
+	RED = 0,
+	BLACK = 1,
+	ANYCOLOUR = 2,
 };
+
+
 
 class Stack 
 {
@@ -53,22 +55,38 @@ public:
 	int		NewTopY;
 	int		NextValidSuit;
 	int		NextValidValue;
+	int		NextValidColour;
+
 	int const  CardHeightDifference = 35;
+	//-----Card Dimensions
+	int const CardWidth = 140;
+	int const CardHeight = 195;
 
 	//-----Variables For Stack Position
 	int		StackXPosition;
 	int		StackYPosition;
 
+	int Length = 0;
+
 
 	//-----Functions
 	void	Push(Card* NewTopCard);
-	void	Pop();
+	Card*	Pop();
 	Card*	Peek();
 	bool	IsEmpty();
+
+	//-----Functions For Cards
+	int		GetNextValidSuit();
+	int		GetNextValidValue();
+	int		GetNextValidColour();
+	void	SetNextValidSuit(int NewSuit);
+	void	SetNextValidValue(int NewValue);
+	void	SetNextValidColour(int NewColour);
 
 	//-----Functions For Get
 	int GetStackXPosition();
 	int GetStackYPosition();
+	int GetLength();
 };
 
 #endif

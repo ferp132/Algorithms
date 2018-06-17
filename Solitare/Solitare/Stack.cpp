@@ -8,7 +8,6 @@ Stack::Stack(int InitialXPosition, int InitialYPosition)
 	TopCard = nullptr;
 	StackXPosition = InitialXPosition;
 	StackYPosition = InitialYPosition;
-
 }
 
 Stack::~Stack()
@@ -17,16 +16,20 @@ Stack::~Stack()
 
 void Stack::Push(Card* NewTopCard)
 {
+	Length++;
 	Card* Pushed = TopCard;
 
 	//connect the new top
 	NewTopCard->SetNextCard(Pushed);
 	NewTopCard->SetPreviousCard(nullptr);
+	NewTopCard->SetHidden(false);
+	NewTopCard->SetFaceUp(true);
 
 	TopCard = NewTopCard;
 	if (Pushed != nullptr) 
 	{
 		Pushed->SetPreviousCard(TopCard);
+		Pushed->SetFaceUp(false);
 
 		//-----Set Draw Location
 		TopCard->SetStartX(Pushed->GetStartX());
@@ -35,8 +38,9 @@ void Stack::Push(Card* NewTopCard)
 		TopCard->SetLastPositionY(TopCard->GetStartY());
 
 		//-----Set Next Valid Suit/Value
-		NextValidSuit = TopCard->GetNextValidSuit();
+//		NextValidSuit = TopCard->GetNextValidSuit();
 		NextValidValue = TopCard->GetNextValidValue();
+		NextValidColour = TopCard->GetNextValidColour();
 	}
 	else
 	{
@@ -47,41 +51,46 @@ void Stack::Push(Card* NewTopCard)
 		TopCard->SetLastPositionY(TopCard->GetStartY());
 
 		//-----Set Next Valid Suit/Value
-		NextValidSuit = TopCard->GetNextValidSuit();
+//		NextValidSuit = TopCard->GetNextValidSuit();
 		NextValidValue = TopCard->GetNextValidValue();
+		NextValidColour = TopCard->GetNextValidColour();
 	}
 	return;
 }
 
-void Stack::Pop()
+Card* Stack::Pop()
 {
+	Length--;
 	if (!IsEmpty()) {
 		Card* Popped = TopCard;
+		Card* NewTopCard = nullptr;
+
 		//if TopCard is the last node
 		if (Popped->GetNextCard() == nullptr) {
-			//dataref = Top->GetData();
-			//Top->SetData(0);
-			//TopCard= nullptr;
-			NextValidSuit = ANY;
+			TopCard = nullptr;
+			NextValidColour = ANY;
+//			NextValidSuit = ANY;
 			NextValidValue = KING;
-			return;
+		}
+		else
+		{
+			NewTopCard = Popped->GetNextCard();
+			NewTopCard->SetFaceUp(true);
+			NewTopCard->SetPreviousCard(nullptr);
 		}
 
-
-		Card* NewTopCard= Popped->GetNextCard();
-
 		//-----Disconnect the popped node
-		NewTopCard->SetPreviousCard(nullptr);
 		Popped->SetNextCard(nullptr);
 
 		//-----Set Next Valid Card To New Top Card
-		NextValidSuit = NewTopCard->GetNextValidSuit();
+//		NextValidSuit = NewTopCard->GetNextValidSuit();
 		NextValidValue = NewTopCard->GetNextValidValue();
+		NextValidColour = NewTopCard->GetNextValidColour();
 
-		TopCard= NewTopCard;
-		return;
+		TopCard = NewTopCard;
+		return Popped;
 	}
-	return;
+	return nullptr;
 }
 
 Card* Stack::Peek()
@@ -89,6 +98,7 @@ Card* Stack::Peek()
 	if (!IsEmpty()) {
 		return TopCard;
 	}
+	else return nullptr;
 }
 
 bool Stack::IsEmpty()
@@ -100,6 +110,36 @@ bool Stack::IsEmpty()
 
 }
 
+int Stack::GetNextValidSuit()
+{
+	return NextValidSuit;
+}
+
+int Stack::GetNextValidValue()
+{
+	return NextValidValue;
+}
+
+int Stack::GetNextValidColour()
+{
+	return NextValidColour;
+}
+
+void Stack::SetNextValidSuit(int NewSuit)
+{
+	NextValidSuit = NewSuit;
+}
+
+void Stack::SetNextValidValue(int NewValue)
+{
+	NextValidValue = NewValue;
+}
+
+void Stack::SetNextValidColour(int NewColour)
+{
+	NextValidColour = NewColour;
+}
+
 int Stack::GetStackXPosition()
 {
 	return StackXPosition;
@@ -108,5 +148,10 @@ int Stack::GetStackXPosition()
 int Stack::GetStackYPosition()
 {
 	return StackYPosition;
+}
+
+int Stack::GetLength()
+{
+	return Length;
 }
 

@@ -146,6 +146,7 @@
     <ClInclude Include="BackBuffer.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Card.h" />
+    <ClInclude Include="Queue.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Solitare.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="BackBuffer.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Card.cpp" />
+    <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Solitare.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="stdafx.cpp">

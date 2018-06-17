@@ -11,14 +11,15 @@ class Card
 public:
 	//-----Constructor/Deconstructor
 //	CStamp(HINSTANCE hInstance, wchar_t* filename, int, int);
-	Card(int InitialSuit, int InitialValue, int InitialX, int InitialY, bool SetRevealed);
+	Card(int InitialSuit, int InitialValue, int InitialX, int InitialY, bool SetFaceUp, bool SetBlank);
 	virtual ~Card();
 
 	//-----Set Values
 	void	SetSuit		(int NewSuit);
 	void	SetValue	(int NewValue);
 	void	SetStack	(int NewStack);
-	void	SetRevelaled();
+	void	SetFaceUp	(bool Facing);
+	void	SetHidden	(bool Visible);
 
 	//-----Set Dimensions
 	void	SetStartX		(int NewX);
@@ -27,6 +28,8 @@ public:
 	void	SetEndY			(int NewY);
 	void	SetPickUpWidth	(int NewX);
 	void	SetPickUpHeight	(int NewY);
+
+
 
 	//-----Set Locations
 	void	SetLastPositionX(int NewX);
@@ -38,8 +41,10 @@ public:
 	//-----Get Values
 	int		GetSuit		();
 	int		GetValue	();
+	int		GetColour	();
 	int		GetStack	();
-	int		GetRevealed	();
+	int		GetFaceUp	();
+	bool	GetHidden	();
 
 	//-----Get Dimensions
 	int		GetStartX		();
@@ -53,28 +58,27 @@ public:
 	int	    GetLastPositionX();
 	int 	GetLastPositionY();
 
-	//-----Stack Variables
-	Card* NextCard;
-	Card* PreviousCard;
-	int NextValidSuit;
-	int NextValidValue;
-
 	//-----Stack Functions
 	void	SetNextCard		(Card* NewNextCard);
 	void	SetPreviousCard	(Card* NewPreviousCard);
 	Card*	GetNextCard		() const;
 	Card*	GetPreviousCard	() const;
-	int GetNextValidSuit();
-	int GetNextValidValue();
-	void SetNextValidSuit(int NewSuit);
-	void SetNextValidValue(int NewValue);
+	int		GetNextValidSuit();
+	int		GetNextValidValue();
+	int		GetNextValidColour();
+	void	SetNextValidSuit(int NewSuit);
+	void	SetNextValidValue(int NewValue);
+	void	SetNextValidColour(int NewColour);
 
 private:
 	//-----Variables
 	int		Suit;
 	int		Value;
+	int		Colour;
 	int		CurrentStack;
-	bool	Revealed;
+	bool	FaceUp;
+	bool	Hidden;
+	bool	Blank;
 
 	//-----Dimensions
 	int			StartX;
@@ -98,6 +102,16 @@ private:
 	BITMAP	BitMapStructure;
 	HDC		LocalDC;
 
+	//-----Card Dimensions
+	int const CardWidth = 140;
+	int const CardHeight = 195;
+
+	//-----Stack Variables
+	Card* NextCard;
+	Card* PreviousCard;
+	int NextValidSuit;
+	int NextValidValue;
+	int NextValidColour;
 };
 
 #endif

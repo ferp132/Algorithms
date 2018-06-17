@@ -2,9 +2,9 @@
 #include "Card.h"
 
 //--------------------------------------------------------Constructor
-Card::Card(int InitialSuit, int InitialValue, int InitialX, int InitialY, bool SetRevealed)
+Card::Card(int InitialSuit, int InitialValue, int InitialX, int InitialY, bool Facing, bool SetBlank)
 {
-	Revealed		= SetRevealed;
+	FaceUp			= Facing;
 	Suit			= InitialSuit;
 	Value			= InitialValue;
 	StartX			= InitialX;
@@ -13,11 +13,18 @@ Card::Card(int InitialSuit, int InitialValue, int InitialX, int InitialY, bool S
 	EndY			= StartY + CardHeight;
 	LastPositionX	= StartX;
 	LastPositionY	= StartY;
+	Blank			= SetBlank;
 
 	//-----For Stack
 	NextCard		= nullptr;
 	PreviousCard	= nullptr;
 
+	
+	if (InitialSuit == 0 || InitialSuit == 3)	Colour = 1;
+	else										Colour = 0;
+
+	NextValidColour = !Colour;
+	NextValidValue	= Value - 1;
 }
 
 //--------------------------------------------------------Destructor
@@ -41,9 +48,14 @@ void Card::SetStack(int NewStack)
 	CurrentStack = NewStack;
 }
 
-void Card::SetRevelaled()
+void Card::SetFaceUp(bool Facing)
 {
-	Revealed = true;
+	FaceUp = Facing;
+}
+
+void Card::SetHidden(bool Visible)
+{
+	Hidden = Visible;
 }
 
 
@@ -93,12 +105,22 @@ void Card::SetLastPositionY(int NewY)
 //--------------------------------------------------------Draw
 void Card::Draw(HDC hdc)
 {
-	//-----Load Bitmap
-	if (Revealed)
-	{
-		BitmapHandle = (HBITMAP)::LoadImage(NULL, L"Classic_Cards13x4x560x780.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	//If Hidden, Dont Draw Anything
+	if (Hidden)
+	{	
+		return;
 	}
-	else
+
+	//-----Load Bitmap
+	if (Blank)
+	{
+		BitmapHandle = (HBITMAP)::LoadImage(NULL, L"BlankCard140x195_Version1.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	}
+	else if (FaceUp)
+	{
+		BitmapHandle = (HBITMAP)::LoadImage(NULL, L"Classic_Cards13x4x140x195.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	}
+	else  
 	{
 		BitmapHandle = (HBITMAP)::LoadImage(NULL, L"HearthStone_CardBack_ReSized.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	}
@@ -138,16 +160,13 @@ void Card::Draw(HDC hdc)
 	}
 
 	//-----Actual Drawing
-	if (Revealed) 
+	if (!FaceUp || Blank) 
 	{
-		
-		Return = BitBlt(hdc, StartX, StartY, CardWidth, CardHeight, LocalDC, CardWidth * Suit, CardHeight * Value, SRCCOPY);
-			
+		Return = BitBlt(hdc, StartX, StartY, CardWidth, CardHeight, LocalDC, 0, 0, SRCCOPY);	
 	}
 	else
 	{
-		Return = BitBlt(hdc, StartX, StartY, CardWidth, CardHeight, LocalDC, 0, 0, SRCCOPY);
-		
+		Return = BitBlt(hdc, StartX, StartY, CardWidth, CardHeight, LocalDC, CardWidth * Value, CardHeight * Suit, SRCCOPY);
 	}
 	//-----Check Fail
 	if (!Return)
@@ -173,14 +192,24 @@ int Card::GetValue()
 	return Value;
 }
 
+int Card::GetColour()
+{
+	return Colour;
+}
+
 int Card::GetStack()
 {
 	return CurrentStack;
 }
 
-int Card::GetRevealed()
+int Card::GetFaceUp()
 {
-	return Revealed;
+	return FaceUp;
+}
+
+bool Card::GetHidden()
+{
+	return Hidden;
 }
 
 //--------------------------------------------------------Return Dimensions
@@ -258,6 +287,11 @@ int Card::GetNextValidValue()
 	return NextValidValue;
 }
 
+int Card::GetNextValidColour()
+{
+	return NextValidColour;
+}
+
 void Card::SetNextValidSuit(int NewSuit)
 {
 	NextValidSuit = NewSuit;
@@ -266,5 +300,10 @@ void Card::SetNextValidSuit(int NewSuit)
 void Card::SetNextValidValue(int NewValue)
 {
 	NextValidValue = NewValue;
+}
+
+void Card::SetNextValidColour(int NewColour)
+{
+	NextValidColour = NewColour;
 }
 
