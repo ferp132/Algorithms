@@ -47,7 +47,7 @@ private:
 	Card* TopCard;
 
 public:
-	Stack(int InitialXPosition, int InitialYPosition);
+	Stack(int InitialXPosition, int InitialYPosition, bool FinalStack);
 	~Stack();
 
 	//-----Variables For Cards
@@ -56,6 +56,7 @@ public:
 	int		NextValidSuit;
 	int		NextValidValue;
 	int		NextValidColour;
+	bool	Final;
 
 	int const  CardHeightDifference = 35;
 	//-----Card Dimensions
